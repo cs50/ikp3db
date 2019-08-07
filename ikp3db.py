@@ -772,14 +772,15 @@ class IKPdb(object):
                 v_name, v_value, v_type = self.extract_name_value_type(a_var_name,
                                                                        a_var_value,
                                                                        limit_size=limit_size)
-                a_var_info = {
-                    'id': id(a_var_value),
-                    'name': v_name,
-                    'type': "%s%s" % (v_type, " [%s]" % children_count if children_count else '',),
-                    'value': v_value,
-                    'children_count': children_count,
-                }
-                var_list.append(a_var_info)
+                if not v_name.startswith("_"):
+                    a_var_info = {
+                        'id': id(a_var_value),
+                        'name': v_name,
+                        'type': "%s%s" % (v_type, " [%s]" % children_count if children_count else '',),
+                        'value': v_value,
+                        'children_count': children_count,
+                    }
+                    var_list.append(a_var_info)
 
         elif type(o) in (list, tuple, set,):
             MAX_CHILDREN_TO_RETURN = 256
@@ -792,22 +793,24 @@ class IKPdb(object):
                 v_name, v_value, v_type = self.extract_name_value_type(idx,
                                                                        a_var_value,
                                                                        limit_size=limit_size)
-                var_list.append({
-                    'id': id(a_var_value),
-                    'name': v_name,
-                    'type': "%s%s" % (v_type, " [%s]" % children_count if children_count else '',),
-                    'value': v_value,
-                    'children_count': children_count,
-                })
-                if do_truncate and idx==MAX_CHILDREN_TO_RETURN-1:
+
+                if not v_name.startswith("_"):
                     var_list.append({
-                        'id': None,
-                        'name': str(MAX_CHILDREN_TO_RETURN),
-                        'type': '',
-                        'value': MAX_CHILDREN_MESSAGE,
-                        'children_count': 0,
+                        'id': id(a_var_value),
+                        'name': v_name,
+                        'type': "%s%s" % (v_type, " [%s]" % children_count if children_count else '',),
+                        'value': v_value,
+                        'children_count': children_count,
                     })
-                    break
+                    if do_truncate and idx==MAX_CHILDREN_TO_RETURN-1:
+                        var_list.append({
+                            'id': None,
+                            'name': str(MAX_CHILDREN_TO_RETURN),
+                            'type': '',
+                            'value': MAX_CHILDREN_MESSAGE,
+                            'children_count': 0,
+                        })
+                        break
         else:
             a_var_name = None
             a_var_value = None
@@ -821,13 +824,15 @@ class IKPdb(object):
                         v_name, v_value, v_type = self.extract_name_value_type(a_var_name,
                                                                                a_var_value,
                                                                                limit_size=limit_size)
-                        var_list.append({
-                            'id': id(a_var_value),
-                            'name': v_name,
-                            'type': "%s%s" % (v_type, " [%s]" % children_count if children_count else '',),
-                            'value': v_value,
-                            'children_count': children_count,
-                        })
+
+                        if not v_name.startswith("_"):
+                            var_list.append({
+                                'id': id(a_var_value),
+                                'name': v_name,
+                                'type': "%s%s" % (v_type, " [%s]" % children_count if children_count else '',),
+                                'value': v_value,
+                                'children_count': children_count,
+                            })
         return var_list
 
     def extract_name_value_type(self, name, value, limit_size=False):
