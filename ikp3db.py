@@ -1875,7 +1875,7 @@ def close_connection():
 # On SIGINT, SIGTERM shutdown socket and close connection
 # (SIGKILL cannot be caught)
 def signal_handler(signal, frame):
-    print("%s received" % SIGNALS_DICT[signal])
+    print("\n%s received" % SIGNALS_DICT[signal])
     close_connection()
     # Cf. http://tldp.org/LDP/abs/html/exitcodes.html
     sys.exit(128+signal)
