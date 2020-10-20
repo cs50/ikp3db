@@ -899,7 +899,12 @@ class IKPdb(object):
             # normalize path sent to debugging client
             file_path = self.normalize_path_out(frame_browser.f_code.co_filename)
 
-            frame_name = "%s() [%s]" % (frame_browser.f_code.co_name, current_thread.name,)
+            # Remove <module>() for simplicity
+            if frame_browser.f_code.co_name == "<module>":
+                frame_name = ""
+            else:
+                frame_name = "%s()" % frame_browser.f_code.co_name
+
             remote_frame = {
                 'id': id(frame_browser),
                 'name': frame_name,
