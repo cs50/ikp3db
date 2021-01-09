@@ -1549,7 +1549,7 @@ class IKPdb(object):
                 # filename passed as argument, return an error message.
                 # The filename should be in canonical form, as described in the
                 # canonic() method.
-                file_name = os.path.join(os.path.expanduser("~/workspace"), args['file_name'])
+                file_name = os.path.join(os.path.expanduser("~"), args['file_name'])
                 line_number = args['line_number']
                 condition = args.get('condition', None)
                 enabled = args.get('enabled', True)
